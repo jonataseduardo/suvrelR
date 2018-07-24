@@ -10,8 +10,6 @@ sample_info <-
 gene_long <- 
   fread('/home/jonatas/suvrelR/extdata/gene_quantifications.tsv') 
 
-sample_info
-
 datum <- 
   gene_long[sample_info[,.(name, pop)], 
             on = c(subject = 'name')]
@@ -25,6 +23,17 @@ erg[,summary(g)]
 new_datum <- datum[erg, on = .(gene_id)]
 new_datum[, tpm_g := tpm * sqrt(g)]
 
-X_old <- dcast(new_datum, gene_id ~ subject, value.var = 'tpm')
-X_new <- dcast(new_datum, gene_id ~ subject, value.var = 'tpm_g')
+X_old <- dcast(new_datum, subject + pop ~ gene_id, value.var = 'tpm')
+X_new <- dcast(new_datum, subject + pop ~ gene_id, value.var = 'tpm_g')
+n <- dim(X_old)[2]
+
+pc_old <- prcomp(X_old[,3:n], center = TRUE)
+po <- as.data.table(pc_old$rotation)[, 1:4]
+
+pc_new <- prcomp(X_new[,3:n], center = TRUE)
+pn <- as.data.table(pc_new$rotation)[, 1:4]
+
+ggplot(pn) + 
+  geom_point(aes(x = PC1, y = PC2))
+
 
