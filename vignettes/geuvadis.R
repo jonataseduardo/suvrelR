@@ -45,5 +45,5 @@ pc_new <- prcomp(X_new[,3:n], center = TRUE)
 pn <- as.data.table(pc_new$rotation)[, 1:4]
 X_new[,1:5]
 
-ggplot(po) + 
+ggplot(pn) + 
   geom_point(aes(x = PC1, y = PC2))
