@@ -8,7 +8,7 @@ sample_info <-
   fread('/home/jonatas/suvrelR/extdata/geuvadis_sample_info.tsv')
 
 gene_wide <- 
-  fread('/home/jonatas/suvrelR/extdata/geuvadis_quantification.txt') 
+  fread('zcat < /home/jonatas/suvrelR/extdata/geuvadis_quantification.txt.gz') 
 
 gene_long <- 
   melt(gene_wide, measure.vars = 5:dim(gene_wide)[2], 
@@ -18,7 +18,7 @@ gene_long <-
 datum <- 
   gene_long[sample_info[,.(name, pop)], 
             on = c(subject = 'name')
-            ][pop != 'CEU' && !is.na(Chr)]
+            ][pop != 'CEU']
 
 datum[, Chr := as.integer(Chr)]
 datum <- datum[!is.na(Chr)]

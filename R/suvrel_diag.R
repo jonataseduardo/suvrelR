@@ -28,5 +28,3 @@ suvrel_diag <-
      erg[, g := - e * cte]
      return(erg[!is.na(g), c(feature, 'g'), with = FALSE])
   }
-
-
